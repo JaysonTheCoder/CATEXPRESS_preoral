@@ -1,0 +1,282 @@
+
+
+// import { useEffect, useState } from 'react';
+// import { useContext } from 'react';
+// import FixedDrawer from "./partials/Drawer";
+// import { GenerateTimeContext } from '../context/generateTimeContext';
+// import { db } from '../../firebaseConfig';
+// import { getDoc, doc, collection, onSnapshot } from 'firebase/firestore';
+// import ReportFilter from './partials/DropDownSelector';
+// import { DropdownContext } from '../context/DropDownContext';
+
+// export default function Reports() {
+//   const [data, setData] = useState([]);
+//   const { monthSelected, selectedYear, months } = useContext(DropdownContext);
+
+//   const getDataFromFirestore = async () => {
+//     if (monthSelected) {
+//       const docRef = doc(db, 'reports', monthSelected);
+//       const docSnapshot = await getDoc(docRef);
+
+//       if (docSnapshot.exists()) {
+//         setData([docSnapshot.data()]);
+//       } else {
+//         console.error('No data found for the selected month.');
+//         setData([]);
+//       }
+//     } else {
+//       // Fetch all reports when no specific month is selected
+//       const collectionRef = collection(db, 'reports');
+//       const unsub = onSnapshot(collectionRef, (snapshot) => {
+//         const allReports = [];
+//         snapshot.forEach((doc) => {
+//           const monthCollectionRef = collection(db, 'Months')
+//           onSnapshot(monthCollectionRef, (newSnap) => {
+//             newSnap.forEach( monthDoc => {
+//               allReports.push({id: monthDoc.id, ...monthDoc.data()});
+//             })
+//           })
+
+
+
+//         });
+//         setData(allReports);
+//       });
+
+//       return unsub; // Return unsubscribe function for cleanup
+//     }
+//   };
+
+//   useEffect(() => {
+//     const unsubscribe = getDataFromFirestore();
+
+//     return () => {
+//       if (unsubscribe && typeof unsubscribe === 'function') {
+//         unsubscribe();
+//       }
+//     };
+//   }, [monthSelected]);
+
+//   const drawerWidth = 240;
+
+//   return (
+//     <div className="container">
+//       <div className="content" style={{ marginLeft: drawerWidth }}>
+//         <div className="app-bar">
+//           <div className="title">Reports</div>
+//         </div>
+//         <div className="main">
+//           <div className="report-container">
+//             <div className="report-banner">
+//               <div className="report-banner-title">
+//                 <h3>2024</h3>
+//                 <p>Monthly Reports</p>
+//               </div>
+//               <div className="drop-down-selector">
+//                 <ReportFilter />
+//               </div>
+//             </div>
+//             {data.length > 0 ? (
+//               data.map((report, index) => (
+//                 <div key={index} className="report-main">
+//                   <div className="report-table-container">
+//                     <div className="report-table-container-head">
+//                       <h4>Reports { report.id }</h4>
+//                     </div>
+//                     <table>
+//                       <thead>
+//                         <tr>
+//                           <th>id</th>
+//                           <th>Conductor Name</th>
+//                           <th>Bus number</th>
+//                           <th>Route</th>
+//                           <th>Trips</th>
+//                           <th>Expenses</th>
+//                           <th>Time reported</th>
+//                           <th>Revenue</th>
+//                         </tr>
+//                       </thead>
+//                       <tbody>
+//                         {Object.values(report.days || {}).map((dayData, idx) => (
+//                           <tr key={idx}>
+//                             <td>{dayData.id}</td>
+//                             <td>{dayData.name}</td>
+//                             <td>{dayData.bus_number}</td>
+//                             <td>{dayData.route}</td>
+//                             <td>{dayData.trips}</td>
+//                             <td>{dayData.expenses}</td>
+//                             <td>
+//                               {`${String(dayData.time_reported.month).padStart(2, '0')}-${String(
+//                                 dayData.time_reported.day
+//                               ).padStart(2, '0')}-${dayData.time_reported.year}`}
+//                             </td>
+//                             <td>{dayData.revenue}</td>
+//                           </tr>
+//                         ))}
+//                       </tbody>
+//                     </table>
+//                   </div>
+//                 </div>
+//               ))
+//             ) : (
+//               <div style={{
+//                 height: '100%',
+//                 alignItems: 'center',
+//                 display: 'flex',
+//                 justifyContent: 'center'
+//               }}>
+//                 <p>No reports available.</p>
+//               </div>
+//             )}
+//           </div>
+//         </div>
+//       </div>
+//       <FixedDrawer drawerWidth={drawerWidth} />
+//     </div>
+//   );
+// }
+
+
+
+
+
+
+
+
+            data.map((report) => (
+                
+                <div key={report.id} className="report-main">
+                  
+                  <div className="report-table-container-head">
+                    <h4>Reports { report.id }</h4>
+                  </div>
+                    <table>
+                      <thead>
+                        <tr>
+                          <th>id</th>
+                          <th>Conductor Name</th>
+                          <th>Bus number</th>
+                          <th>Route</th>
+                          <th>Trips</th>
+                          <th>Expenses</th>
+                          <th>Time reported</th>
+                          <th>Revenue</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {Object.values(report.days || {}).map((dayData, idx) => (
+                          <tr key={idx}>
+                            
+                            <td>{dayData.id}</td>
+                            <td>{dayData.name}</td>
+                            <td>{dayData.bus_number}</td>
+                            <td>{dayData.route}</td>
+                            <td>{dayData.trips}</td>
+                            <td>{dayData.expenses}</td>
+                            <td>
+                              {`${String(dayData.time_reported.month).padStart(2, '0')}-${String(
+                                dayData.time_reported.day
+                              ).padStart(2, '0')}-${dayData.time_reported.year}`}
+                            </td>
+                            <td>{dayData.revenue}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>                  
+                </div>
+              ))
+            ) : (
+              <div style={{ height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                <p>No reports available.</p>
+              </div>
+            )}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            {data.length > 0 ? (
+              data.map((report) => (
+                <div key={report.id} className="report-main">
+                  <div className="report-table-container-head">
+                    <h4>Reports {}</h4>
+                  </div>
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>id</th>
+                        <th>Conductor Name</th>
+                        <th>Bus number</th>
+                        <th>Route</th>
+                        <th>Trips</th>
+                        <th>Expenses</th>
+                        <th>Time reported</th>
+                        <th>Revenue</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {Object.values(report.days || {}).map((dayData, idx) => (
+                        <tr key={idx}>
+                          <td>{dayData.id}</td>
+                          <td>{dayData.name}</td>
+                          <td>{dayData.bus_number}</td>
+                          <td>{dayData.route}</td>
+                          <td>{dayData.trips}</td>
+                          <td>{dayData.expenses}</td>
+                          <td>
+                            {`${String(dayData.time_reported.month).padStart(2, '0')}-${String(dayData.time_reported.day).padStart(2, '0')}-${dayData.time_reported.year}`}
+                          </td>
+                          <td>{dayData.revenue}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              ))
+            ) : (
+              <div style={{ height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                <p>No reports available.</p>
+              </div>
+            )}
+
+
+
+
+
+
+
+
+
+collection/(Route "example: Viga, San andres, Virac:)/fromTo:{
+  0: {
+    destination: "Virac",
+    origin: "Villa Aurora",
+    departure: "4:00AM"
+  },
+  1: {
+    destination: "Virac",
+    origin: "Villa Aurora",
+    departure: "4:00AM"
+  },
+}and toFrom:{
+  //same structure of fromTo
+}
